@@ -1,0 +1,20 @@
+{
+    "name": "kristiani/email-roundtrip-monitor",
+    "description": "E-mail Roundtrip monitor package",
+    "authors": [
+        {
+            "name": "Kristian Just Iversen",
+            "email": "kristian@justiversen.dk"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0",
+        "ddeboer/imap": "0.5.*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "dev-master"
+    },
+    "autoload": {
+        "psr-4": { "Roundtripmonitor\\": "src/Roundtripmonitor" }
+    }
+}
