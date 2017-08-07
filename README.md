@@ -36,7 +36,7 @@ service (e.g. uptimerobot.com) pull this check instead of a local cron.
 If you would like your receiving cron to return status code 500 on failure:
 
 ```php
-\Roundtripmonitor\Config::server('imap.host.com', 143, 'imapUsername', 'imapPassword', 'INBOX);
+\Roundtripmonitor\Config::server('imap.host.com', 143, 'imapUsername', 'imapPassword', 'INBOX');
 \Roundtripmonitor\Confirm::emailOrFail();
 ```
 
