@@ -1,16 +1,16 @@
 <?php
 
-use Roundtripmonitor\Config;
 use Roundtripmonitor\Send;
+use Roundtripmonitor\Config;
 use Roundtripmonitor\Confirm;
 
-class RoundtripmonitorTest extends PHPUnit_Framework_TestCase {
-    
+class RoundtripmonitorTest extends PHPUnit_Framework_TestCase
+{
     public function setUp()
     {
         Config::$receiverEmail = 'testmailbox@receiver.com';
     }
-    
+
     /**
      * Test that the send function calls the callback function
      * 
@@ -18,17 +18,17 @@ class RoundtripmonitorTest extends PHPUnit_Framework_TestCase {
      */
     public function testSend()
     {
-        list($constructedSubject, $constructedBody) = Send::email(function($toName, $toEmail, $fromName, $fromEmail, $subject, $body) {
+        list($constructedSubject, $constructedBody) = Send::email(function ($toName, $toEmail, $fromName, $fromEmail, $subject, $body) {
             return array(
                 $subject,
                 $body
             );
         });
-        
+
         $this->assertTrue(strpos($constructedSubject, 'Round-trip Monitor Test Mail') !== false);
         $this->assertTrue(strpos($constructedBody, 'Sent unix timestamp') !== false);
     }
-    
+
     /**
      * Test that the connection can be established to the receiving mailbox
      * and that no round-trip messages were found.
@@ -41,7 +41,7 @@ class RoundtripmonitorTest extends PHPUnit_Framework_TestCase {
         Config::server('imap.host.com', 143, 'imapUsername', 'imapPassword', 'INBOX');
         Confirm::email();
     }
-    
+
     /**
      * Server config function without all arguments
      */
@@ -53,7 +53,7 @@ class RoundtripmonitorTest extends PHPUnit_Framework_TestCase {
             $this->assertEquals(2, $e->getCode());
         }
     }
-    
+
     /**
      * Server config function all arguments filled in
      */
@@ -61,5 +61,4 @@ class RoundtripmonitorTest extends PHPUnit_Framework_TestCase {
     {
         $this->assertEquals(NULL, Config::server('imap.host.com', 143, 'imapUsername', 'imapPassword', 'INBOX'));
     }
-    
 }

@@ -7,8 +7,8 @@ namespace Roundtripmonitor;
  *
  * @author Kristian Just Iversen
  */
-class Send {
-    
+class Send
+{
     /**
      * Send test email using a local email function
      * 
@@ -17,11 +17,16 @@ class Send {
      */
     public static function email($callback)
     {
-        return $callback(Config::$receiverName, Config::$receiverEmail, Config::$senderName, Config::$senderEmail, self::createSubject(), self::createBody());
+        return $callback(
+            Config::$receiverName,
+            Config::$receiverEmail,
+            Config::$senderName,
+            Config::$senderEmail,
+            self::createSubject(),
+            self::createBody()
+        );
     }
-    
-    /********** PROTECTED METHODS **********/
-    
+
     /**
      * Create subject
      * 
@@ -31,7 +36,7 @@ class Send {
     {
         return 'Round-trip Monitor Test Mail';
     }
-    
+
     /**
      * Create body
      * 
@@ -45,5 +50,4 @@ Sent unix timestamp: {time()}
 Sent date GMT: {gmdate('Y-m-d H:i:s')}
 EOT;
     }
-    
 }

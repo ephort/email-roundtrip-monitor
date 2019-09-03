@@ -3,19 +3,18 @@
 namespace Roundtripmonitor;
 
 use Ddeboer\Imap\Server;
-use Ddeboer\Imap\SearchExpression;
-use Ddeboer\Imap\Search\Text\Subject;
-use Ddeboer\Imap\Search\Text\Body;
-
 use Roundtripmonitor\Config;
+use Ddeboer\Imap\SearchExpression;
+use Ddeboer\Imap\Search\Text\Body;
+use Ddeboer\Imap\Search\Text\Subject;
 
 /**
  * Confirm receipt
  *
  * @author Kristian Just Iversen
  */
-class Confirm {
-    
+class Confirm
+{
     /**
      * Confirm email receipt
      * 
@@ -24,23 +23,23 @@ class Confirm {
     public static function email()
     {
         $messages = self::getRoundtripMonitorEmailsInMailbox();
-        
+
         if (count($messages) === 0) {
             throw new \Exception('No round-trip monitor e-mails found.');
         }
-        
+
         $thresholdDateTime = new \DateTime();
         $thresholdDateTime->setTimestamp(time() - Config::$alertThresholdTime);
-        
+
         foreach ($messages as $message) {
             if ($message->getDate() > $thresholdDateTime) {
                 return true;
             }
         }
-        
+
         throw new \Exception('No e-mails within acceptable time interval found.');
     }
-    
+
     /**
      * Confirm receipt of email or fail with status code 500.
      * 
@@ -54,12 +53,10 @@ class Confirm {
             self::failed($ex->getMessage());
             die;
         }
-        
+
         self::ok();
     }
-    
-    /********** PROTECTED METHODS **********/
-    
+
     /**
      * Ok response
      * 
@@ -69,7 +66,7 @@ class Confirm {
     {
         return http_response_code(200);
     }
-    
+
     /**
      * Failed response
      * 
@@ -81,7 +78,7 @@ class Confirm {
         echo $message;
         return http_response_code(500);
     }
-    
+
     /**
      * Create IMAP connection
      * 
@@ -90,10 +87,10 @@ class Confirm {
     protected static function createImapConnection()
     {
         $server = new Server(Config::$imapServerHost, Config::$imapServerPort, Config::$imapCert);
-        
+
         return $server->authenticate(Config::$imapServerUsername, Config::$imapServerPassword);
     }
-    
+
     /**
      * Get mailbox
      * 
@@ -102,10 +99,10 @@ class Confirm {
     protected static function getMailbox()
     {
         $connection = self::createImapConnection();
-        
+
         return $connection->getMailbox(Config::$imapMailbox);
     }
-    
+
     /**
      * Get round-trip monitor emails in mailbox
      * 
@@ -114,12 +111,10 @@ class Confirm {
     protected static function getRoundtripMonitorEmailsInMailbox()
     {
         $mailbox = self::getMailbox();
-        
+
         $search = new SearchExpression();
         $search->addCondition(new Subject('Round-trip Monitor Test Mail'));
 
         return $mailbox->getMessages($search);
     }
-    
-    
 }
